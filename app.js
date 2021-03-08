@@ -44,9 +44,54 @@ firebase.initializeApp({
             <td>${doc.data().first}</td>
             <td>${doc.data().last}</td>
             <td>${doc.data().born}</td>
-            <td><button class="btn btn-danger">Eliminar</button></td>
-            <td><button class="btn btn-warning">Editar</button></td>
+            <td><button class="btn btn-danger" onclick="eliminar('${doc.id}')">Eliminar</button></td>
+            <td><button class="btn btn-warning" onclick="editar('${doc.id}','${doc.data().first}','${doc.data().last}','${doc.data().born}')">Editar</button></td>
         </tr>
         `
         });
     });
+
+    //borrar documento
+    function eliminar(id){
+        db.collection("users").doc(id).delete().then(() => {
+            console.log("Document successfully deleted!");
+        }).catch((error) => {
+            console.error("Error removing document: ", error);
+        });
+    }
+
+    //Editar Documento
+    function editar(id, nombre, apellido, año){
+        console.log(id);
+        var nombre = document.getElementById('nombre').value = nombre;
+        var apellido = document.getElementById('apellido').value = apellido;
+        var año = document.getElementById('año').value = año;
+        var boton = document.getElementById('boton');
+        boton.innerHTML = 'Editar';
+
+        boton.onclick = function(){
+            var washingtonRef = db.collection("users").doc(id);
+
+            var nombre = document.getElementById('nombre').value;
+            var apellido = document.getElementById('apellido').value;
+            var año = document.getElementById('año').value;
+
+            // Set the "capital" field of the city 'DC'
+            return washingtonRef.update({
+                first: nombre,
+                last: apellido,
+                born: año
+            })
+            .then(() => {
+                console.log("Document successfully updated!");
+                boton.innerHTML = 'Agregar';
+                document.getElementById('nombre').value = '';
+                document.getElementById('apellido').value = '';
+                document.getElementById('año').value = '';
+            })
+            .catch((error) => {
+                // The document probably doesn't exist.
+                console.error("Error updating document: ", error);
+            });
+        }
+    }
