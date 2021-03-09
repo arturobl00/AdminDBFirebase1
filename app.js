@@ -85,9 +85,7 @@ firebase.initializeApp({
             .then(() => {
                 console.log("Document successfully updated!");
                 boton.innerHTML = 'Agregar';
-                document.getElementById('nombre').value = '';
-                document.getElementById('apellido').value = '';
-                document.getElementById('año').value = '';
+                window.location.reload();
             })
             .catch((error) => {
                 // The document probably doesn't exist.
